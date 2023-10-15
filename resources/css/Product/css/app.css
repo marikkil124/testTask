@@ -1,0 +1,193 @@
+/* roboto-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/roboto-v30-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+}
+
+.LogoTask {
+    width: 53px;
+    height: 22.85px;
+    top: 18px;
+    left: 12px;
+
+}
+
+.addButton {
+    width: 136px;
+    height: 30px;
+    top: 76px;
+    left: 1286px;
+    border-radius: 6px;
+    background: #0FC5FF;
+    position: absolute;
+}
+
+.addButtonText {
+    font-weight: 500;
+    font-size: 11px;
+    font-family: Roboto;
+    line-height: 11px;
+    color: white;
+    margin-left: 45px;
+}
+
+.EnterpriseText {
+    width: 50px;
+    height: 33px;
+    top: 7px;
+    left: 90px;
+    position: absolute;
+    color: white;
+    font-family: Roboto;
+    font-size: 11px;
+    line-height: 11px;
+
+}
+
+.FullFill {
+    width: 1441px;
+    height: 1080px;
+    left: -1px;
+    position: absolute;
+    background: white;
+}
+
+.rectangle77 {
+    width: 1293px;
+    height: 1020px;
+    top: 59px;
+    left: 180.13px;
+    background: #F2F6FA;
+    position: absolute;
+}
+
+.rectangle2 {
+    width: 79px;
+    height: 59px;
+    left: -1px;
+    border-radius: 0px 0px 20px 0px;
+    background: #FFFFFF;
+    position: absolute;
+
+}
+
+.logo {
+    width: 53px;
+    height: 22.85px;
+    top: 18px;
+    left: 12px;
+    position: absolute;
+
+}
+
+.rectangle16 {
+    width: 181px;
+    height: 1080px;
+    left: -1px;
+    background: #374050;
+
+}
+
+.rectangle38 {
+    width: 1000px;
+    height: 1015px;
+    top: 0px;
+    left: -1px;
+    background: white;
+    position: absolute;
+
+}
+
+.TextStyle {
+
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 400;
+
+    text-align: left;
+
+
+}
+
+.rectangle78 {
+    width: 629px;
+    height: 110px;
+    top: 88px;
+    left: 180px;
+    position: absolute;
+
+}
+
+.ProductText {
+    width: 57px;
+    height: 11px;
+    top: 72px;
+    left: 33px;;
+    position: absolute;
+    color: white;
+    font-family: Roboto;
+    font-size: 11px;
+    line-height: 11px;
+
+
+}
+
+.ProductText {
+    width: 57px;
+    height: 11px;
+    top: 72px;
+    left: 33px;;
+    position: absolute;
+    color: white;
+
+
+}
+
+.ProductRed {
+    width: 61px;
+    height: 11px;
+    top: 25px;
+    left: 197px;
+    position: absolute;
+    color: red;
+
+}
+
+.redLine{
+    width: 60px;
+    height: 3px;
+    top: 56px;
+    left: 198px;
+    position: absolute;
+    color:red;
+
+}
+.addComponent {
+    width: 700px;
+
+    top: 60px;
+    left: 768px;
+    border: 1px ;
+    background: #374050;
+
+
+    position: absolute;
+}
