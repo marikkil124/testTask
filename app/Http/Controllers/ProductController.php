@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Jobs\AddProductJob;
 use App\Models\User;
@@ -22,8 +23,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        //$products= ProductResource::collection($products)->resolve();
+        $products = Product::Available()->get();
+
         return inertia('Product/index',compact('products'));
 
     }
@@ -64,7 +65,10 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+        $product = Product::where('id', $id)->get();
+
+       return response($product);
     }
 
     /**
@@ -72,15 +76,18 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        $product= Product::where('id',$id);
+        $product->update($data);
+        return response($product);
     }
 
     /**

@@ -21,7 +21,7 @@ class Product extends Model
 
     }
     protected $guarded = false;
-    public function scopeActive(Builder $query): void
+    public function scopeAvailable(Builder $query): void
     {
         $query->where('status', '=','Available');
     }

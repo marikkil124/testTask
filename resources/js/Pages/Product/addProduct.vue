@@ -43,9 +43,8 @@ function addAttributes()
     });
 
 
-
-
 }
+
 function deleteAttr(attribute){
     console.log(attribute)
     attributes.value=attributes.value.filter(a=>a!==attribute)

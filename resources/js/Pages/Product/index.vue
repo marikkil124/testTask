@@ -1,22 +1,22 @@
 <script setup>
 import AddProduct from "@/Pages/Product/addProduct.vue";
 import {ref, watch} from "vue";
+import show from "@/Pages/Product/show.vue";
+import Edit from "@/Pages/Product/edit.vue";
 
-
-const addVisible=ref(false);
+const editVisible = ref(false)
+const addVisible = ref(false);
+const showVisible = ref(false);
 const props = defineProps(['products']);
-// console.log(props.products)
-//let results = props.products.filter(item=> item = item.DATA !== 'null');
+let productShow = ref()
 
-// let results = props.products.filter((item,index,array)=>
-// {
-//     console.log(typeof (JSON.parse(item.DATA)));
-// });
+function editShow(product) {
 
-//console.log(typeof (props.products[i].DATA));
-//console.log(typeof (results));
-
-
+    axios.get(`api/products/${product.id}`).then(res => {
+        productShow.value = res.data[0]
+        showVisible.value = true
+    })
+}
 
 
 </script>
@@ -25,9 +25,9 @@ const props = defineProps(['products']);
 
 
     <div class="rectangle38">
-        <div class="ProductRed TextStyle" >Продукты</div>
+        <div class="ProductRed TextStyle">Продукты</div>
 
-        <div class="redLine" style="border-bottom: 4px solid red" ></div>
+        <div class="redLine" style="border-bottom: 4px solid red"></div>
 
         <div class="rectangle16">
             <div class="rectangle2">
@@ -114,36 +114,44 @@ const props = defineProps(['products']);
         </div>
         <div class="rectangle77">
             <div style=" margin-top: 10px; margin-left: 20px; ">
-                <table class="TextStyle " style="  color: #6E6E6F;">
+                <table class="TextStyle " style="color: #6E6E6F;">
                     <tr>
                         <td style="width: 140px">Артикул</td>
                         <td style="width: 140px">Название</td>
                         <td style="width: 140px">Статус</td>
                         <td style="width: 140px">Аттрибуты</td>
                     </tr>
-                    <tr style="background: white;border-top: 1px solid gray;border-bottom: 1px solid gray;height: 30px"
-                    v-for="product in props.products">
-                        <td>{{product.article}}</td>
-                        <td>{{product.name}}</td>
-                        <td>{{product.status}}</td>
 
-                        <td >
+                    <tr class="bg-white border-solid border-2 border-t-gray-500 hover:bg-gray-100 cursor-pointer"
+                        v-for="product in props.products" @click="editShow(product)"
+                    >
+
+                        <td>{{ product.article }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.status }}</td>
+
+                        <td>
                             <div v-for="res in JSON.parse(product.DATA)">
-                                <p> name:{{res.name }}</p>
-                                <p> value:{{res.value}}</p>
+                                <p> name:{{ res.name }}</p>
+                                <p> value:{{ res.value }}</p>
                             </div>
 
                         </td>
                     </tr>
                 </table>
-
             </div>
         </div>
         <div class="addButton">
             <button class="addButtonText" @click="addVisible=true">Добавить</button>
         </div>
-        <div v-if="addVisible" >
+        <div v-if="addVisible">
             <add-product @addVisible="(msg) => addVisible = msg"></add-product>
+        </div>
+        <div v-if="showVisible">
+            <show @showVisible="(msg) => showVisible = msg"  @editVisible="(msg) => editVisible = msg"  :productShow="productShow"/>
+        </div>
+        <div v-if="editVisible">
+            <edit  :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg"/>
         </div>
     </div>
 
