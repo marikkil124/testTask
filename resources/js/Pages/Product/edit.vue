@@ -6,47 +6,71 @@ const id = ref(0)
 const attributes = ref()
 const AttributeName = ref(null)
 const AttributeValue = ref(null)
-const heightAttribute = ref(390)
-const data = ref({
-    article:props.product.article,
-    name:props.product.name,
-    status:props.product.status,
-})
+const heightAttribute = ref(380)
+const props = defineProps(['product']);
+const emit = defineEmits(['editVisible', 'addVisible'])
 const attributesData = ref(JSON.parse(props.product.DATA))
+const data = ref({
+    article: props.product.article,
+    name: props.product.name,
+    status: props.product.status,
+})
 
-function addAttributes()
-{
-    let attrIsset= attributesData.value.length!==0?attributesData.value:null;
-    axios.patch(`api/products/${props.product.id}`, {data:data,attributes:attrIsset}).then(res=>{
+
+function deleteHeight(attributesDataLength) {
+    console.log(attributesDataLength)
+    switch (attributesDataLength) {
+        case 1:
+        case 0:
+        case 2:
+            heightAttribute.value -= 57;
+            console.log(heightAttribute.value)
+            break;
+
+    }
+}
+
+function addHeight(attributesDataLength) {
+
+    let issetAttr=attributesDataLength?attributesDataLength.length:attributesData.value=[]
+
+    switch (issetAttr) {
+        case 1:
+            heightAttribute.value += 57;
+            break;
+        case 2:
+            if(heightAttribute.value===437)
+                heightAttribute.value += 57;
+            else
+                heightAttribute.value += 114;
+            break;
+        case 0:
+            heightAttribute.value
+            break
+    }
+}
+function addAttributes() {
+    console.log(data.value)
+    let attrIsset = attributesData.value.length !== 0 ? attributesData.value : null;
+    axios.patch(`api/products/${props.product.id}`, {data: data.value, attributes: attrIsset}).then(res => {
         console.log(res)
         AttributeName.value = ''
         AttributeValue.value = ''
-
+        emit('editVisible',false)
     });
-
 }
-
 function addAttribute() {
-    console.log(attributesData.value.length)
-    if (attributesData.value.length < 2) {
-        attributesData.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
-        heightAttribute.value += 57
-        // AttributeName.value = ''
-        // AttributeValue.value = ''
+    attributesData.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
+    addHeight(attributesData.value)
 
-    }
-
-    AttributeName.value = ''
-    AttributeValue.value = ''
 }
-
-const props = defineProps(['product']);
-
-const emit = defineEmits(['editVisible','addVisible'])
-
 function deleteAttr(attribute) {
+
     attributesData.value = attributesData.value.filter(a => a !== attribute)
+    deleteHeight(attributesData.value.length)
 }
+
+addHeight(attributesData.value)
 
 </script>
 
@@ -64,7 +88,7 @@ function deleteAttr(attribute) {
         <div>
             <div style="margin-left: 10px">
 
-                <h1 class="text-white text-lg mb-3">Добавить продукт</h1>
+                <h1 class="text-white text-lg mb-3">Редактировать {{data.article}}</h1>
                 <p class="TextStyle mb-2" style=" color: white;">Артикул</p>
                 <input class="mb-2" style="background: white;width: 500px;height: 34px; border-radius: 10px"
                        v-model="data.article">
@@ -74,7 +98,7 @@ function deleteAttr(attribute) {
                 <p class="TextStyle mb-2" style=" color: white;">Статус</p>
                 <select class="mb-2" style="background: white;width: 500px; height: 40px;border-radius: 10px"
                         v-model="data.status">
-                    <option  :value="data.status">
+                    <option :value="data.status">
                         Доступен
                     </option>
                     <option value="NotAvailable">

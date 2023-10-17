@@ -9,7 +9,9 @@ const addVisible = ref(false);
 const showVisible = ref(false);
 const props = defineProps(['products']);
 let productShow = ref()
-
+watch(props.products,(products)=>{
+    console.log(products)
+})
 function editShow(product) {
 
     axios.get(`api/products/${product.id}`).then(res => {
@@ -151,7 +153,7 @@ function editShow(product) {
             <show @showVisible="(msg) => showVisible = msg"  @editVisible="(msg) => editVisible = msg"  :productShow="productShow"/>
         </div>
         <div v-if="editVisible">
-            <edit  :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg"/>
+            <edit  :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg "/>
         </div>
     </div>
 

@@ -36,16 +36,16 @@ console.log(props.productShow)
             </svg>
         </div>
 
-
+        <h1 class="text-white text-lg ml-3">{{ props.productShow.article }} </h1>
         <div class=" flex">
             <div class="ml-3 mt-10 text-sm text-gray-400 ">
-                <p>Артикул</p>
+                <p>Артикул </p>
                 <p>Название</p>
                 <p>Статус</p>
                 <p>Аттрибуты</p>
             </div>
 
-            <div class=" ml-3 mt-10 text-white text-sm ">
+            <div class=" ml-3 mt-10 text-white text-sm w-32 ">
                 <p>{{ props.productShow.article }}</p>
                 <p>{{ props.productShow.name }} </p>
                 <p>{{ props.productShow.status }}</p>

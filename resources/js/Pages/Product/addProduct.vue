@@ -4,6 +4,7 @@ import {ref, watch} from "vue";
 const id = ref(0)
 const AttributeName = ref(null)
 const AttributeValue = ref(null)
+const emit = defineEmits(['addVisible'])
 const data=ref({
     article:'',
     name:'',
@@ -31,7 +32,7 @@ function addAttributes()
 {
 
     let attrIsset= attributes.value.length!==0?attributes.value:null;
-    axios.post('api/products', {data:data.value,attributes:attrIsset}).then(res=>{
+    route.post('api/products', {data:data.value,attributes:attrIsset}).then(res=>{
 
         console.log(res)
         data.value.article=''
@@ -49,7 +50,7 @@ function deleteAttr(attribute){
     console.log(attribute)
     attributes.value=attributes.value.filter(a=>a!==attribute)
 }
-const emit = defineEmits(['addVisible'])
+
 
 </script>
 

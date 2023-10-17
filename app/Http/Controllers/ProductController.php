@@ -23,7 +23,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::Available()->get();
+        $products = Product::Available()->get()->sort();
 
         return inertia('Product/index',compact('products'));
 
@@ -46,17 +46,17 @@ class ProductController extends Controller
         $data = $request->validated();
 
 
-        $product = Product::create([
-            'article'=>$data['data']['article'],
-            'name'=>$data['data']['name'],
-            'status'=>$data['data']['status'],
-            'DATA'=>(json_encode($data['attributes']))
-        ]);
-
-       // Mail::to(config('products.email'))->send(new AddProduct());
-
-        AddProductJob::dispatchAfterResponse();
-
+//        $product = Product::create([
+//            'article'=>$data['data']['article'],
+//            'name'=>$data['data']['name'],
+//            'status'=>$data['data']['status'],
+//            'DATA'=>(json_encode($data['attributes']))
+//        ]);
+//
+//
+//
+//        AddProductJob::dispatchAfterResponse();
+        return response($data);
 
     }
 
@@ -85,9 +85,15 @@ class ProductController extends Controller
     public function update(UpdateRequest $request, string $id)
     {
         $data = $request->validated();
-        $product= Product::where('id',$id);
-        $product->update($data);
-        return response($product);
+        $product= Product::where('id',$id)->update([
+            'article'=>$data['data']['article'],
+            'name'=>$data['data']['name'],
+            'status'=>$data['data']['status'],
+            'DATA'=>(json_encode($data['attributes']))
+        ]);
+
+
+
     }
 
     /**
