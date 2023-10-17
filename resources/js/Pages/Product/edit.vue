@@ -1,5 +1,6 @@
 <script setup>
 import {ref, watch} from "vue";
+import {router} from "@inertiajs/vue3";
 
 const id = ref(0)
 
@@ -7,7 +8,11 @@ const attributes = ref()
 const AttributeName = ref(null)
 const AttributeValue = ref(null)
 const heightAttribute = ref(380)
-const props = defineProps(['product']);
+const errorsData = ref({
+    article: null,
+    name: null,
+})
+const props = defineProps(['product', 'errors']);
 const emit = defineEmits(['editVisible', 'addVisible'])
 const attributesData = ref(JSON.parse(props.product.DATA))
 const data = ref({
@@ -32,14 +37,14 @@ function deleteHeight(attributesDataLength) {
 
 function addHeight(attributesDataLength) {
 
-    let issetAttr=attributesDataLength?attributesDataLength.length:attributesData.value=[]
+    let issetAttr = attributesDataLength ? attributesDataLength.length : attributesData.value = []
 
     switch (issetAttr) {
         case 1:
             heightAttribute.value += 57;
             break;
         case 2:
-            if(heightAttribute.value===437)
+            if (heightAttribute.value === 437)
                 heightAttribute.value += 57;
             else
                 heightAttribute.value += 114;
@@ -49,21 +54,45 @@ function addHeight(attributesDataLength) {
             break
     }
 }
+
 function addAttributes() {
-    console.log(data.value)
+
+
     let attrIsset = attributesData.value.length !== 0 ? attributesData.value : null;
-    axios.patch(`api/products/${props.product.id}`, {data: data.value, attributes: attrIsset}).then(res => {
-        console.log(res)
-        AttributeName.value = ''
-        AttributeValue.value = ''
-        emit('editVisible',false)
-    });
+
+    router.patch(`products/${props.product.id}`,
+        {
+            article: data.value.article,
+            name: data.value.name,
+            status: data.value.status,
+            attributes: attrIsset
+        },
+        {
+            onError: (res) => {
+
+                console.log(res)
+                errorsData.value.article = res.article
+                errorsData.value.name = res.name
+
+            }
+,
+            onSuccess: () => {
+                emit("editVisible",false)
+            }
+
+        })
+
 }
+
+console.log(errorsData.value.article)
+// if (errorsData.value.article===null ||errorsData.value.name ===null)
+//     emit("editVisible",false)
 function addAttribute() {
     attributesData.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
     addHeight(attributesData.value)
 
 }
+
 function deleteAttr(attribute) {
 
     attributesData.value = attributesData.value.filter(a => a !== attribute)
@@ -88,13 +117,17 @@ addHeight(attributesData.value)
         <div>
             <div style="margin-left: 10px">
 
-                <h1 class="text-white text-lg mb-3">Редактировать {{data.article}}</h1>
+                <h1 class="text-white text-lg mb-3">Редактировать {{ data.article }}</h1>
                 <p class="TextStyle mb-2" style=" color: white;">Артикул</p>
-                <input class="mb-2" style="background: white;width: 500px;height: 34px; border-radius: 10px"
+                <input id="data.article"
+                       style="background: white;width: 500px;height: 34px; border-radius: 10px"
                        v-model="data.article">
+                <p class="text-red-600 text-sm" v-if="errorsData.article">Артикул уже существует</p>
                 <p class="TextStyle mb-2" style=" color: white;">Название</p>
-                <input class="mb-2" style="background: white;width: 500px; height: 34px;border-radius: 10px"
+                <input id="data.name"
+                       style="background: white;width: 500px; height: 34px;border-radius: 10px"
                        v-model="data.name">
+                <p class="text-red-600 text-sm" v-if="errorsData.name">Имя должно быть не менее 8 символов</p>
                 <p class="TextStyle mb-2" style=" color: white;">Статус</p>
                 <select class="mb-2" style="background: white;width: 500px; height: 40px;border-radius: 10px"
                         v-model="data.status">
@@ -134,7 +167,8 @@ addHeight(attributesData.value)
                 </div>
             </div>
             <p class="text-sm text-sky-500 mt-2 ml-2 cursor-pointer" @click="addAttribute">+Добавить аттрибут</p>
-            <button class="bg-sky-500 text-white text-sm rounded-lg w-24 h-6 ml-2 mt-5" @click="addAttributes()">
+            <button class="bg-sky-500 text-white text-sm rounded-lg w-24 h-6 ml-2 mt-5"
+                    @click.prevent="addAttributes()">
                 Добавить
             </button>
         </div>

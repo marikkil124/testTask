@@ -7,16 +7,15 @@ import Edit from "@/Pages/Product/edit.vue";
 const editVisible = ref(false)
 const addVisible = ref(false);
 const showVisible = ref(false);
-const props = defineProps(['products']);
+const props = defineProps(['products','errors']);
 let productShow = ref()
-watch(props.products,(products)=>{
-    console.log(products)
-})
+
 function editShow(product) {
 
     axios.get(`api/products/${product.id}`).then(res => {
         productShow.value = res.data[0]
         showVisible.value = true
+
     })
 }
 
@@ -116,6 +115,7 @@ function editShow(product) {
         </div>
         <div class="rectangle77">
             <div style=" margin-top: 10px; margin-left: 20px; ">
+
                 <table class="TextStyle " style="color: #6E6E6F;">
                     <tr>
                         <td style="width: 140px">Артикул</td>
@@ -153,7 +153,7 @@ function editShow(product) {
             <show @showVisible="(msg) => showVisible = msg"  @editVisible="(msg) => editVisible = msg"  :productShow="productShow"/>
         </div>
         <div v-if="editVisible">
-            <edit  :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg "/>
+            <edit :errors="props.errors" :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg "/>
         </div>
     </div>
 

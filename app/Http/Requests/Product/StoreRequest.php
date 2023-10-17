@@ -22,9 +22,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data.article'=>'required|string|unique:products,article',
-            'data.name'=>'required|string|min:8',
-            'data.status'=>'nullable|string',
+            'article'=>'required|string|unique:products,article',
+            'name'=>'required|string|min:8',
+            'status'=>'nullable|string',
             'attributes'=>'nullable|array',
 
 

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use mysql_xdevapi\Exception;
 
 
 class ProductController extends Controller
@@ -46,17 +47,17 @@ class ProductController extends Controller
         $data = $request->validated();
 
 
-//        $product = Product::create([
-//            'article'=>$data['data']['article'],
-//            'name'=>$data['data']['name'],
-//            'status'=>$data['data']['status'],
-//            'DATA'=>(json_encode($data['attributes']))
-//        ]);
-//
-//
-//
-//        AddProductJob::dispatchAfterResponse();
-        return response($data);
+         Product::create([
+            'article'=>$data['article'],
+            'name'=>$data['name'],
+            'status'=>$data['status'],
+            'DATA'=>(json_encode($data['attributes']))
+        ]);
+
+
+
+        AddProductJob::dispatchAfterResponse();
+
 
     }
 
@@ -85,12 +86,15 @@ class ProductController extends Controller
     public function update(UpdateRequest $request, string $id)
     {
         $data = $request->validated();
-        $product= Product::where('id',$id)->update([
-            'article'=>$data['data']['article'],
-            'name'=>$data['data']['name'],
-            'status'=>$data['data']['status'],
-            'DATA'=>(json_encode($data['attributes']))
-        ]);
+
+          Product::where('id',$id)->update([
+                'article'=>$data['article'],
+                'name'=>$data['name'],
+                'status'=>$data['status'],
+                'DATA'=>(json_encode($data['attributes']))
+            ]);
+
+
 
 
 
