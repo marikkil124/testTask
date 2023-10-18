@@ -1,6 +1,11 @@
 <?php
 
 return [
-    'email'=>'almawwqwz@mail.ru'
+    'email'=>'mar1k@mail.ru',
+    'roles'=>[
+        //в бд в таблице юзерс, колонка role хранит ключи ролей если 0 то это админ, если нет то другие
+        0=>'admin',
+        1=>'user'
+    ],
 
 ];

@@ -7,8 +7,9 @@ import Edit from "@/Pages/Product/edit.vue";
 const editVisible = ref(false)
 const addVisible = ref(false);
 const showVisible = ref(false);
-const props = defineProps(['products','errors']);
+const props = defineProps(['products','errors','user']);
 let productShow = ref()
+const user = ref(props.user)
 
 function editShow(product) {
 
@@ -130,7 +131,7 @@ function editShow(product) {
 
                         <td>{{ product.article }}</td>
                         <td>{{ product.name }}</td>
-                        <td>{{ product.status }}</td>
+                        <td >{{ product.status }}</td>
 
                         <td>
                             <div v-for="res in JSON.parse(product.DATA)">
@@ -153,7 +154,7 @@ function editShow(product) {
             <show @showVisible="(msg) => showVisible = msg"  @editVisible="(msg) => editVisible = msg"  :productShow="productShow"/>
         </div>
         <div v-if="editVisible">
-            <edit :errors="props.errors" :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg "/>
+            <edit :user="user" :product="productShow" @addVisible="(msg) => addVisible = msg"  @editVisible="(msg) => editVisible = msg "/>
         </div>
     </div>
 

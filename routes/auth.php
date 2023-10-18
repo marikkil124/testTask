@@ -57,5 +57,5 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
-   // Route::resource('products', \App\Http\Controllers\ProductController::class);
+    Route::resource('products', \App\Http\Controllers\ProductController::class);
 });

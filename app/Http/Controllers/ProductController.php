@@ -5,6 +5,7 @@ use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Jobs\AddProductJob;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Requests\Product\StoreRequest;
 
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use mysql_xdevapi\Exception;
+use function MongoDB\BSON\toJSON;
 
 
 class ProductController extends Controller
@@ -25,8 +27,12 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::Available()->get()->sort();
+           $data = [
+            'products'=>$products,
+            'user' => Auth::user(),
 
-        return inertia('Product/index',compact('products'));
+        ];
+       return inertia('Product/index',$data);
 
     }
 
@@ -45,8 +51,6 @@ class ProductController extends Controller
     {
 
         $data = $request->validated();
-
-
          Product::create([
             'article'=>$data['article'],
             'name'=>$data['name'],
@@ -68,6 +72,7 @@ class ProductController extends Controller
     {
 
         $product = Product::where('id', $id)->get();
+
 
        return response($product);
     }
@@ -105,6 +110,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+         Product::where('id', $id)->delete();
+
     }
 }

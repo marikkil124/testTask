@@ -1,9 +1,11 @@
 <script setup>
 import {ref, watch} from "vue";
 import {router} from "@inertiajs/vue3";
+import {deleteHeight, addHeight} from "@/Pages/Product/HeightChange.js";
 
+const props = defineProps(['product', 'errors', 'user']);
+const emit = defineEmits(['editVisible', 'addVisible'])
 const id = ref(0)
-
 const attributes = ref()
 const AttributeName = ref(null)
 const AttributeValue = ref(null)
@@ -12,9 +14,6 @@ const errorsData = ref({
     article: null,
     name: null,
 })
-const props = defineProps(['product', 'errors']);
-const emit = defineEmits(['editVisible', 'addVisible'])
-const attributesData = ref(JSON.parse(props.product.DATA))
 const data = ref({
     article: props.product.article,
     name: props.product.name,
@@ -22,44 +21,16 @@ const data = ref({
 })
 
 
-function deleteHeight(attributesDataLength) {
-    console.log(attributesDataLength)
-    switch (attributesDataLength) {
-        case 1:
-        case 0:
-        case 2:
-            heightAttribute.value -= 57;
-            console.log(heightAttribute.value)
-            break;
+const attributesData = ref(JSON.parse(props.product.DATA))
 
-    }
-}
+if (!attributesData.value)
+    attributesData.value = []
+else
+    attributesData.value.length
 
-function addHeight(attributesDataLength) {
-
-    let issetAttr = attributesDataLength ? attributesDataLength.length : attributesData.value = []
-
-    switch (issetAttr) {
-        case 1:
-            heightAttribute.value += 57;
-            break;
-        case 2:
-            if (heightAttribute.value === 437)
-                heightAttribute.value += 57;
-            else
-                heightAttribute.value += 114;
-            break;
-        case 0:
-            heightAttribute.value
-            break
-    }
-}
 
 function addAttributes() {
-
-
     let attrIsset = attributesData.value.length !== 0 ? attributesData.value : null;
-
     router.patch(`products/${props.product.id}`,
         {
             article: data.value.article,
@@ -69,37 +40,33 @@ function addAttributes() {
         },
         {
             onError: (res) => {
-
                 console.log(res)
                 errorsData.value.article = res.article
                 errorsData.value.name = res.name
-
             }
-,
-            onSuccess: () => {
-                emit("editVisible",false)
+            , onSuccess: () => {
+                emit("editVisible", false)
             }
 
         })
 
 }
 
-console.log(errorsData.value.article)
-// if (errorsData.value.article===null ||errorsData.value.name ===null)
-//     emit("editVisible",false)
 function addAttribute() {
     attributesData.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
-    addHeight(attributesData.value)
-
+    if (attributesData.value.length < 3)
+        heightAttribute.value = addHeight(attributesData.value.length, heightAttribute.value)
+    else
+        emit("editVisible", false)
 }
 
 function deleteAttr(attribute) {
-
     attributesData.value = attributesData.value.filter(a => a !== attribute)
-    deleteHeight(attributesData.value.length)
+    heightAttribute.value = deleteHeight(attributesData.value.length, heightAttribute.value)
 }
 
-addHeight(attributesData.value)
+heightAttribute.value = addHeight(attributesData.value.length, heightAttribute.value)
+
 
 </script>
 
@@ -119,7 +86,8 @@ addHeight(attributesData.value)
 
                 <h1 class="text-white text-lg mb-3">Редактировать {{ data.article }}</h1>
                 <p class="TextStyle mb-2" style=" color: white;">Артикул</p>
-                <input id="data.article"
+                <p class="text-red-600 text-sm" v-if="props.user.role!=0">У вас нет прав редактирования артикула</p>
+                <input id="data.article" :disabled="props.user.role!=0"
                        style="background: white;width: 500px;height: 34px; border-radius: 10px"
                        v-model="data.article">
                 <p class="text-red-600 text-sm" v-if="errorsData.article">Артикул уже существует</p>

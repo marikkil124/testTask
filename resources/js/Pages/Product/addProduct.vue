@@ -1,6 +1,7 @@
 <script setup>
 import {ref, watch} from "vue";
 import {router} from "@inertiajs/vue3";
+import {addHeight, deleteHeight} from "@/Pages/Product/HeightChange.js";
 
 const id = ref(0)
 const errorsData = ref({
@@ -16,27 +17,18 @@ const data = ref({
     status: '',
 })
 const attributes = ref([])
-const heightAttribute = ref(390)
+const heightAttribute = ref(380)
 
 function addAttribute() {
-    if (attributes.value.length < 2) {
-        attributes.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
-        heightAttribute.value += 57
-        AttributeName.value = ''
-        AttributeValue.value = ''
-
-    } else
-        emit('addVisible', false)
-
-    AttributeName.value = ''
-    AttributeValue.value = ''
+    attributes.value.push({id: id.value++, name: AttributeName.value, value: AttributeValue.value})
+    if (attributes.value.length < 3)
+        heightAttribute.value = addHeight(attributes.value.length, heightAttribute.value)
+    else
+        emit("addVisible", false)
 }
 
-
 function addAttributes() {
-
     let attrIsset = attributes.value.length !== 0 ? attributes.value : null;
-
     router.post('products', {
             article: data.value.article,
             name: data.value.name,
@@ -46,7 +38,6 @@ function addAttributes() {
         ,
         {
             onError: (res) => {
-
                 console.log(res)
                 errorsData.value.article = res.article
                 errorsData.value.name = res.name
@@ -64,9 +55,13 @@ function addAttributes() {
 function deleteAttr(attribute) {
     console.log(attribute)
     attributes.value = attributes.value.filter(a => a !== attribute)
+
+    heightAttribute.value = deleteHeight(attributes.value.length, heightAttribute.value)
+
+
 }
 
-
+heightAttribute.value = addHeight(attributes.value.length, heightAttribute.value)
 </script>
 
 <template>
